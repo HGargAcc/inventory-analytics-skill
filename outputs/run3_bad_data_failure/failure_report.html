@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>Pipeline Failure Report — Run 3: Corrupted Dataset — Failure Scenario (Expected: Pipeline Halts)</title>
+<style>body { font-family: 'Segoe UI', sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }
+h1 { color: #c0392b; } .box { background: #fdf2f2; border-left: 4px solid #e74c3c; padding: 15px; margin: 20px 0; }</style>
+</head><body>
+<h1>Pipeline Failure Report</h1>
+<p><strong>Scenario:</strong> Run 3: Corrupted Dataset — Failure Scenario (Expected: Pipeline Halts)<br>
+<strong>Dataset:</strong> data/bad_data.csv<br>
+<strong>Generated:</strong> 2026-04-11 10:55:02</p>
+<div class="box">
+<h2>Validation Status: FAIL</h2>
+<p>The data validation stage detected critical issues. The pipeline correctly halted.</p>
+<h3>Critical Errors</h3><ul><li style='color:red'><strong>Column 'sales_volume' exceeds 30% null threshold (40.3%).</strong></li><li style='color:red'><strong>Column 'unit_cost' contains negative values.</strong></li><li style='color:red'><strong>Column 'lead_time_days' contains lead times < 1 day.</strong></li></ul>
+<h3>Warnings</h3><ul><li>None</li></ul>
+</div>
+<h2>How to Fix</h2>
+<ul>
+<li>Ensure all required columns exist: <code>date, sku_id, category, sales_volume, unit_cost, lead_time_days</code></li>
+<li>No column should have &gt;30% null values.</li>
+<li><code>sales_volume</code> and <code>unit_cost</code> must be non-negative.</li>
+<li><code>lead_time_days</code> must be &ge; 1.</li>
+</ul>
+</body></html>

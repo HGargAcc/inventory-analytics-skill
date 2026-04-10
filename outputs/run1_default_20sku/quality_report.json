@@ -1,0 +1,55 @@
+{
+    "status": "PASS",
+    "row_count": 23720,
+    "column_count": 6,
+    "warnings": [
+        "Column 'sales_volume' has 0.19% null values. Imputation required."
+    ],
+    "errors": [],
+    "column_profiles": {
+        "date": {
+            "dtype": "object",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "unique_values": 1186,
+            "min_date": "2023-01-01",
+            "max_date": "2026-03-31"
+        },
+        "sku_id": {
+            "dtype": "object",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "unique_values": 20
+        },
+        "category": {
+            "dtype": "object",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "unique_values": 12
+        },
+        "sales_volume": {
+            "dtype": "float64",
+            "null_count": 45,
+            "null_percentage": 0.19,
+            "min": 0.0,
+            "max": 1746.0,
+            "mean": 399.21959873284055
+        },
+        "unit_cost": {
+            "dtype": "float64",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "min": 1.1,
+            "max": 22.0,
+            "mean": 5.0215
+        },
+        "lead_time_days": {
+            "dtype": "int64",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "min": 1.0,
+            "max": 68.0,
+            "mean": 15.537689713322091
+        }
+    }
+}

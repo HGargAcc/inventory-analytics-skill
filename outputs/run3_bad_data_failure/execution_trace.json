@@ -1,0 +1,78 @@
+[
+  {
+    "timestamp": "2026-04-11T10:55:01.193883",
+    "message": "============================================================"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:01.193886",
+    "message": "PIPELINE RUN: Run 3: Corrupted Dataset \u2014 Failure Scenario (Expected: Pipeline Halts)"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:01.193887",
+    "message": "Run ID: run3_bad_data_failure | LLM Model: llama-3.3-70b-versatile"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:01.193888",
+    "message": "Output directory: /Users/himanshu.garg/Desktop/my-analytics-skill/outputs/run3_bad_data_failure"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:01.193889",
+    "message": "============================================================"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:01.193893",
+    "message": "STAGE START: Data Generation"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:01.193894",
+    "message": "  Command: python3 scripts/generate_synthetic_data.py --output data/bad_data.csv --seed 42 --catalogue A --n_skus 5 --start_date 2024-01-01 --end_date 2025-12-31 --inject_bad_data"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.254251",
+    "message": "  Exit code: 0 | Duration: 1.06s"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.254288",
+    "message": "  STDOUT: [WARNING] Bad data injected: ~40% nulls in sales_volume, negative costs, zero lead times.\nDataset generated: 3655 rows, 5 SKUs \u2192 data/bad_data.csv"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.254305",
+    "message": "STAGE START: Stage 1: Data Validation & Profiling"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.254313",
+    "message": "  Command: python3 scripts/validate_data.py --input data/bad_data.csv --output /Users/himanshu.garg/Desktop/my-analytics-skill/outputs/run3_bad_data_failure/quality_report.json"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.787035",
+    "message": "  Exit code: 1 | Duration: 0.53s"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.787069",
+    "message": "  STDOUT: Validation complete. Status: FAIL\nReport saved to: /Users/himanshu.garg/Desktop/my-analytics-skill/outputs/run3_bad_data_failure/quality_report.json"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.796989",
+    "message": "  Quality Status: FAIL"
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.796997",
+    "message": "  [ERROR] Column 'sales_volume' exceeds 30% null threshold (40.3%)."
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.797004",
+    "message": "  [ERROR] Column 'unit_cost' contains negative values."
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.797005",
+    "message": "  [ERROR] Column 'lead_time_days' contains lead times < 1 day."
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.797008",
+    "message": "PIPELINE HALTED: Data validation failed."
+  },
+  {
+    "timestamp": "2026-04-11T10:55:02.797009",
+    "message": "This is EXPECTED for failure-scenario runs."
+  }
+]

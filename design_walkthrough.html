@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Walkthrough — Inventory Optimization &amp; Demand Forecasting Skill</title>
+    <style>
+        @page { size: A4; margin: 2cm; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7; color: #2c3e50; max-width: 900px;
+            margin: 0 auto; padding: 30px 40px;
+            font-size: 11.5pt;
+        }
+        h1 { color: #1a5276; font-size: 22pt; border-bottom: 3px solid #2980b9; padding-bottom: 8px; margin-bottom: 5px; }
+        .subtitle { color: #5d6d7e; font-size: 11pt; margin-bottom: 25px; }
+        h2 { color: #2980b9; font-size: 15pt; margin-top: 28px; border-left: 4px solid #2980b9; padding-left: 12px; }
+        h3 { color: #34495e; font-size: 12pt; margin-top: 18px; }
+        p { text-align: justify; margin-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; font-size: 10.5pt; }
+        th, td { padding: 8px 10px; text-align: left; border: 1px solid #d5dbdb; }
+        th { background: #2980b9; color: white; font-weight: 600; }
+        tr:nth-child(even) { background: #f4f6f7; }
+        .callout { background: #eaf2f8; border-left: 4px solid #2980b9; padding: 12px 16px; margin: 14px 0; border-radius: 0 4px 4px 0; }
+        .callout-warn { background: #fef9e7; border-left: 4px solid #f39c12; padding: 12px 16px; margin: 14px 0; border-radius: 0 4px 4px 0; }
+        .callout-fix { background: #eafaf1; border-left: 4px solid #27ae60; padding: 12px 16px; margin: 14px 0; border-radius: 0 4px 4px 0; }
+        code { background: #f4f6f7; padding: 2px 6px; border-radius: 3px; font-size: 10pt; }
+        .arch-diagram { text-align: center; margin: 20px 0; }
+        .arch-box { display: inline-block; background: #2980b9; color: white; padding: 8px 14px; border-radius: 6px; margin: 4px; font-size: 10pt; font-weight: 600; }
+        .arch-box.script { background: #27ae60; }
+        .arch-box.llm { background: #8e44ad; }
+        .arch-box.fail { background: #e74c3c; }
+        .arrow { display: inline-block; font-size: 16pt; color: #7f8c8d; margin: 0 4px; vertical-align: middle; }
+        .page-break { page-break-before: always; }
+        .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #d5dbdb; font-size: 9pt; color: #7f8c8d; text-align: center; }
+        .toc { background: #f8f9fa; padding: 16px 24px; border-radius: 6px; margin: 20px 0; }
+        .toc a { color: #2980b9; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .metric-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 14px 0; }
+        .metric-card { background: #f8f9fa; border: 1px solid #d5dbdb; border-radius: 6px; padding: 12px; text-align: center; }
+        .metric-card .num { font-size: 20pt; font-weight: bold; color: #2980b9; }
+        .metric-card .label { font-size: 9pt; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+
+<!-- ─── PAGE 1 ──────────────────────────────────────────────────────────── -->
+
+<h1>Design Walkthrough</h1>
+<p class="subtitle">
+    Enterprise Inventory Optimization &amp; Demand Forecasting — LLM-Powered Analytics Skill<br>
+    <strong>Repository:</strong> <a href="https://github.com/HGargAcc/inventory-analytics-skill">github.com/HGargAcc/inventory-analytics-skill</a><br>
+    <strong>Date:</strong> April 2026 &nbsp;|&nbsp; <strong>LLM:</strong> Llama-3.3-70B via Groq API
+</p>
+
+<div class="toc">
+    <strong>Table of Contents</strong>
+    <ol>
+        <li><a href="#s1">Why This Domain</a></li>
+        <li><a href="#s2">Architecture &amp; Pipeline Design</a></li>
+        <li><a href="#s3">Why These Steps — Stage-by-Stage Rationale</a></li>
+        <li><a href="#s4">LLM Integration Design</a></li>
+        <li><a href="#s5">What Failed and What We Fixed</a></li>
+        <li><a href="#s6">Test Scenario Results</a></li>
+        <li><a href="#s7">Lessons Learned &amp; Future Improvements</a></li>
+    </ol>
+</div>
+
+<h2 id="s1">1. Why This Domain</h2>
+
+<p>We chose <strong>Supply Chain — Inventory Optimization &amp; Demand Forecasting</strong> for FMCG products for three reasons:</p>
+
+<p><strong>Business Impact.</strong> Inventory costs represent 20-30% of total supply chain expenditure in FMCG. Overstocking ties up working capital; understocking causes lost sales and eroded customer trust. Even a 5% improvement in forecast accuracy translates directly to measurable bottom-line savings through reduced safety stock buffers.</p>
+
+<p><strong>Analytical Richness.</strong> The domain naturally demands all six mandatory pipeline stages: time-series data requires rigorous validation (Stage 1), lag features and rolling statistics need careful engineering (Stage 2), multiple forecasting algorithms must compete head-to-head (Stage 3), statistical metrics like WMAPE objectively validate results (Stage 4), and the business interpretation layer (Stage 5) maps mathematical outputs to actionable procurement decisions. No stage can be hand-waved — each is substantive.</p>
+
+<p><strong>Multi-Algorithm Comparison.</strong> Demand patterns in FMCG vary dramatically — stable pantry staples vs. highly seasonal holiday items vs. erratic viral products. This variation creates a compelling champion/challenger dynamic where different algorithms genuinely win for different SKUs, making the comparison meaningful rather than performative.</p>
+
+<div class="callout">
+    <strong>Domain Scope:</strong> 20 SKUs across 10 categories (Ambient Grocery, Chilled Proteins, Frozen Proteins, Beverages, Condiments, Outdoor/Seasonal, Baking, Confectionery, Snacks, Health &amp; Beauty) with daily granularity from January 2023 to March 2026.
+</div>
+
+<h2 id="s2">2. Architecture &amp; Pipeline Design</h2>
+
+<p>The skill package follows a strict separation of concerns: <strong>SKILL.md</strong> orchestrates the pipeline logic, <strong>REFERENCE.md</strong> encodes domain knowledge, <strong>scripts/</strong> handle computation, and the <strong>LLM</strong> handles interpretation and narrative generation.</p>
+
+<div class="arch-diagram">
+    <div class="arch-box">CSV Input</div>
+    <span class="arrow">&rarr;</span>
+    <div class="arch-box script">validate_data.py</div>
+    <span class="arrow">&rarr;</span>
+    <div class="arch-box script">forecast_and_optimize.py</div>
+    <span class="arrow">&rarr;</span>
+    <div class="arch-box llm">Groq LLM (Insights)</div>
+    <span class="arrow">&rarr;</span>
+    <div class="arch-box script">generate_report.py</div>
+    <span class="arrow">&rarr;</span>
+    <div class="arch-box">HTML Report</div>
+    <br><br>
+    <div class="arch-box fail">Bad Data</div>
+    <span class="arrow">&rarr;</span>
+    <div class="arch-box script">validate_data.py</div>
+    <span class="arrow">&rarr;</span>
+    <div class="arch-box fail">HALT + Failure Report</div>
+</div>
+
+<p><strong>Key architectural decisions:</strong></p>
+<ul>
+    <li><strong>Deterministic computation, LLM interpretation:</strong> All mathematical operations (forecasting, safety stock calculation, WMAPE scoring) run in Python scripts with fixed random seeds. The LLM is used only where it excels — translating numbers into business language and generating narrative insights. This ensures reproducibility.</li>
+    <li><strong>Fail-fast validation:</strong> The pipeline halts immediately on data quality failure (Stage 1) rather than producing garbage outputs. This is critical for production supply chain systems.</li>
+    <li><strong>Structured JSON handoffs:</strong> Every stage produces a JSON artifact that the next stage consumes. This makes the pipeline debuggable — you can inspect any intermediate file to understand what happened.</li>
+    <li><strong>Full tracing:</strong> Every script execution, LLM call (prompt, response, token count, latency), and decision point is logged with timestamps in <code>execution_trace.json</code>.</li>
+</ul>
+
+<!-- ─── PAGE 2 ──────────────────────────────────────────────────────────── -->
+<div class="page-break"></div>
+
+<h2 id="s3">3. Why These Steps — Stage-by-Stage Rationale</h2>
+
+<table>
+    <tr>
+        <th>Stage</th>
+        <th>Script / Actor</th>
+        <th>Why This Design</th>
+    </tr>
+    <tr>
+        <td><strong>1. Data Validation &amp; Profiling</strong></td>
+        <td><code>validate_data.py</code></td>
+        <td>Enforces schema constraints (non-negative sales, lead time &ge; 1, &lt;30% nulls per column). Real supply chain data is messy — dates arrive unparseable, ERP exports contain blanks. Catching this before modelling prevents silent garbage-in-garbage-out failures.</td>
+    </tr>
+    <tr>
+        <td><strong>2. Feature Engineering</strong></td>
+        <td><code>forecast_and_optimize.py</code></td>
+        <td>Builds 17 features per SKU: lag values (1, 7, 14, 28 days), rolling statistics (mean and std over 7/14/28-day windows), and calendar features (day-of-week, month, day-of-year, week-of-year). These capture short-term momentum, medium-term trends, and calendar seasonality. Missing values are linearly interpolated before feature creation.</td>
+    </tr>
+    <tr>
+        <td><strong>3. Multi-Algorithm Modelling</strong></td>
+        <td><code>forecast_and_optimize.py</code></td>
+        <td>Two fundamentally different approaches compete: <strong>Gradient Boosted Trees</strong> (captures non-linear interactions and recent momentum) vs. <strong>Fourier Seasonal Model</strong> (Ridge regression on yearly + weekly Fourier harmonics, isolating calendar-driven patterns). The winner is selected per-SKU by WMAPE on a holdout set — this reveals the underlying demand driver.</td>
+    </tr>
+    <tr>
+        <td><strong>4. Result Validation</strong></td>
+        <td><code>run_pipeline_llm.py</code></td>
+        <td>Programmatically verifies every SKU has a winning algorithm and flags any WMAPE &gt; 0.30 as "Poor Accuracy." This prevents the pipeline from silently reporting unreliable forecasts as if they were trustworthy.</td>
+    </tr>
+    <tr>
+        <td><strong>5. Insight Generation</strong></td>
+        <td><strong>Groq LLM</strong></td>
+        <td>The LLM receives optimization results + REFERENCE.md, classifies each SKU into archetypes (Stable Baseload, Highly Seasonal, Erratic/Volatile), and generates per-SKU business recommendations grounded in the domain knowledge document. This is where the LLM adds real value — it synthesises patterns across 20 SKUs into a coherent narrative.</td>
+    </tr>
+    <tr>
+        <td><strong>6. Report Generation</strong></td>
+        <td><code>generate_report.py</code> + <strong>Groq LLM</strong></td>
+        <td>Python generates the charts (scatter plot, WMAPE comparison bar chart) and data tables. The LLM generates the executive summary narrative. Both are merged into a single self-contained HTML document with embedded base64 images — no external dependencies.</td>
+    </tr>
+</table>
+
+<div class="callout">
+    <strong>Design Choice — Why combine Stages 2 &amp; 3 into one script?</strong> Feature engineering and modelling are tightly coupled for time-series data — the train/test split must happen <em>after</em> feature creation to prevent data leakage. Separating them would require serialising and deserialising large intermediate DataFrames. Bundling them in <code>forecast_and_optimize.py</code> keeps the pipeline efficient while maintaining logical separation in SKILL.md's documentation.
+</div>
+
+<h2 id="s4">4. LLM Integration Design</h2>
+
+<p>The LLM (Llama-3.3-70B via Groq) is used at two specific points, with deliberate prompt engineering:</p>
+
+<h3>Stage 5 — Insight Generation Prompt</h3>
+<p>The prompt sends the full REFERENCE.md as grounding context, the optimisation results JSON, and structured instructions to: (1) classify each SKU into an archetype, (2) interpret the winning algorithm choice, (3) generate recommendations using REFERENCE.md templates, and (4) flag high-WMAPE SKUs. Temperature is set to 0.3 to keep outputs factual. The system prompt explicitly instructs: <em>"Do not hallucinate metrics or benchmarks."</em></p>
+
+<h3>Stage 6 — Executive Summary Prompt</h3>
+<p>Receives aggregate metrics (total SKUs, average WMAPE, model win counts) plus a preview of the Stage 5 insights. Temperature is 0.2 (even more conservative) since executive summaries must be precise. The system prompt targets a VP of Supply Chain audience.</p>
+
+<h3>Observability</h3>
+<p>Every LLM call logs: full prompt text, full response text, model ID, token usage (prompt + completion + total), and wall-clock latency. These are embedded in <code>execution_trace.json</code> with type <code>"LLM_CALL"</code>, making it easy to audit exactly what the LLM saw and said.</p>
+
+<!-- ─── PAGE 3 ──────────────────────────────────────────────────────────── -->
+<div class="page-break"></div>
+
+<h2 id="s5">5. What Failed and What We Fixed</h2>
+
+<p>Development was iterative. Below are the significant issues encountered and how they were resolved:</p>
+
+<h3>Failure 1: JSON Structure Mismatch Between Scripts</h3>
+<div class="callout-warn">
+    <strong>Problem:</strong> The original <code>generate_report.py</code> expected nested JSON keys like <code>item['model_selection']['winning_wmape']</code> and <code>item['forecast_metrics']['next_30d_avg_daily_demand']</code>, but <code>forecast_and_optimize.py</code> produced flat keys like <code>item['winning_wmape']</code> and <code>item['avg_daily_demand']</code>. The report script would crash with a <code>KeyError</code> every time.
+</div>
+<div class="callout-fix">
+    <strong>Fix:</strong> Rewrote <code>generate_report.py</code> from scratch to consume the actual flat JSON structure. Also added a WMAPE comparison bar chart, per-SKU archetype classification, and colour-coded WMAPE values in the table (green &lt; 0.15, amber &lt; 0.30, red &gt; 0.30).
+</div>
+
+<h3>Failure 2: Python vs Python3 Command</h3>
+<div class="callout-warn">
+    <strong>Problem:</strong> The pipeline runner initially used <code>python scripts/...</code> commands, but the development machine only had <code>python3</code> on PATH. Every subprocess call failed with exit code 127 (<code>command not found</code>).
+</div>
+<div class="callout-fix">
+    <strong>Fix:</strong> Updated all subprocess commands to use <code>python3</code> explicitly. This was also applied to the synthetic data generation commands in scenario definitions.
+</div>
+
+<h3>Failure 3: Matplotlib Deprecation Warning</h3>
+<div class="callout-warn">
+    <strong>Problem:</strong> <code>plt.cm.get_cmap()</code> raised a <code>MatplotlibDeprecationWarning</code> in Matplotlib 3.7+, cluttering stderr output and trace logs.
+</div>
+<div class="callout-fix">
+    <strong>Fix:</strong> In the LLM-powered report generator, switched to the modern <code>plt.colormaps.get_cmap()</code> API. Also added <code>matplotlib.use("Agg")</code> at import time to ensure headless rendering.
+</div>
+
+<h3>Failure 4: Run 3 Bad Data — Intentional but Validated</h3>
+<div class="callout-warn">
+    <strong>Problem:</strong> The corrupted dataset (40% nulls in <code>sales_volume</code>, negative <code>unit_cost</code>, zero <code>lead_time_days</code>) was designed to test the guardrails. The first version of the runner simply crashed without producing any output.
+</div>
+<div class="callout-fix">
+    <strong>Fix:</strong> Added a <code>generate_failure_report()</code> function that produces a structured HTML report explaining exactly which validation rules were violated and how to fix the data. The pipeline now degrades gracefully — it halts, logs the reason, saves the trace, and outputs an actionable failure report.
+</div>
+
+<h3>Failure 5: Prophet Dependency Complexity</h3>
+<div class="callout-warn">
+    <strong>Problem:</strong> Facebook Prophet has heavy dependencies (PyStan/CmdStan) that are difficult to install reliably across environments. This would make the skill non-portable.
+</div>
+<div class="callout-fix">
+    <strong>Fix:</strong> Replaced Prophet with a mathematically equivalent <strong>Fourier Seasonal Model</strong> — a Ridge regression on a linear trend plus yearly and weekly Fourier harmonics (3 orders each, 14 features total). This achieves the same seasonality-isolation effect using only <code>sklearn</code> and <code>numpy</code>, with zero additional dependencies. The output is labelled "Fourier Seasonal" and the implementation is documented in REFERENCE.md Section 3.
+</div>
+
+<!-- ─── PAGE 4 ──────────────────────────────────────────────────────────── -->
+<div class="page-break"></div>
+
+<h2 id="s6">6. Test Scenario Results</h2>
+
+<p>Three full pipeline runs were executed with the Groq LLM (Llama-3.3-70B-versatile):</p>
+
+<table>
+    <tr>
+        <th>Scenario</th>
+        <th>Dataset</th>
+        <th>Parameters</th>
+        <th>Result</th>
+    </tr>
+    <tr>
+        <td><strong>Run 1:</strong> Default Happy Path</td>
+        <td>20 SKUs, 23,741 rows<br>(Jan 2023 – Mar 2026)</td>
+        <td>Holdout: 30 days<br>Z: 1.65 (95% SL)</td>
+        <td style="color:#27ae60"><strong>SUCCESS</strong><br>Avg WMAPE: 0.2818<br>GBR: 7 wins, Fourier: 13 wins</td>
+    </tr>
+    <tr>
+        <td><strong>Run 2:</strong> Alt Dataset + Aggressive Params</td>
+        <td>15 SKUs (Catalogue B), 15,525 rows<br>(Jun 2023 – Mar 2026)</td>
+        <td>Holdout: 45 days<br>Z: 2.33 (99% SL)</td>
+        <td style="color:#27ae60"><strong>SUCCESS</strong><br>Avg WMAPE: 0.1557<br>GBR: 7 wins, Fourier: 8 wins</td>
+    </tr>
+    <tr>
+        <td><strong>Run 3:</strong> Corrupted Data (Failure Test)</td>
+        <td>5 SKUs, 3,655 rows<br>40% nulls, negatives, zero lead times</td>
+        <td>Holdout: 30 days<br>Z: 1.65</td>
+        <td style="color:#e74c3c"><strong>HALTED</strong> (as expected)<br>3 validation errors detected<br>Failure report generated</td>
+    </tr>
+</table>
+
+<h3>LLM Performance Across Runs</h3>
+<table>
+    <tr>
+        <th>Run</th>
+        <th>LLM Calls</th>
+        <th>Total Tokens</th>
+        <th>Total Latency</th>
+    </tr>
+    <tr><td>Run 1</td><td>2 (insights + summary)</td><td>~6,881</td><td>~7.8s</td></tr>
+    <tr><td>Run 2</td><td>2 (insights + summary)</td><td>~6,372</td><td>~8.1s</td></tr>
+    <tr><td>Run 3</td><td>0 (halted before LLM stage)</td><td>0</td><td>N/A</td></tr>
+</table>
+
+<div class="callout">
+    <strong>Key Observation:</strong> Run 2 achieved significantly better average WMAPE (0.1557 vs. 0.2818) despite using a longer holdout period (45 vs. 30 days). This is because Catalogue B contains fewer extreme-seasonal and erratic SKUs. The higher Z-score (2.33) produced substantially inflated safety stock levels — for example, SKU_506_FROZEN_PIZZA required 282 units of safety stock at 99% SL vs. what would have been ~200 units at 95% SL. This demonstrates the interactive parameter sensitivity: increasing service level has a non-linear impact on inventory investment.
+</div>
+
+<h2 id="s7">7. Lessons Learned &amp; Future Improvements</h2>
+
+<h3>What Worked Well</h3>
+<ul>
+    <li><strong>Separation of computation and interpretation:</strong> Having scripts produce numbers and the LLM produce narratives keeps the pipeline auditable. Every number in the report can be traced back to a deterministic script.</li>
+    <li><strong>REFERENCE.md as grounding document:</strong> The LLM's insights were consistently accurate because it had explicit archetype definitions, formula specifications, and recommendation templates to follow — not open-ended generation.</li>
+    <li><strong>Structured JSON handoffs:</strong> Made debugging straightforward. When the report script failed, we could inspect <code>optimization_results.json</code> directly to identify the key structure mismatch.</li>
+    <li><strong>Fail-fast guardrails:</strong> Run 3 demonstrated that the pipeline correctly refuses to produce misleading forecasts from corrupted data — a critical property for production systems.</li>
+</ul>
+
+<h3>Limitations</h3>
+<ul>
+    <li><strong>Point forecasts only:</strong> The current pipeline produces point estimates without prediction intervals. A production system should generate confidence bands to communicate forecast uncertainty.</li>
+    <li><strong>Uniform service level:</strong> All SKUs receive the same Z-score. In practice, high-margin "never-out" items should have Z = 2.33 while low-margin substitutable items could use Z = 1.28.</li>
+    <li><strong>Additive seasonality assumption:</strong> The Fourier model assumes additive seasonality. Items with multiplicative patterns (where seasonal amplitude scales with trend) may be under-captured.</li>
+    <li><strong>No external data:</strong> The pipeline does not incorporate exogenous signals (promotions, pricing changes, weather) that significantly influence FMCG demand.</li>
+</ul>
+
+<h3>Future Improvements</h3>
+<ul>
+    <li>Add <strong>MCP server integration</strong> for live inventory data feeds from ERP systems.</li>
+    <li>Implement <strong>margin-weighted service levels</strong> per SKU using unit cost and margin data.</li>
+    <li>Add a <strong>human-in-the-loop checkpoint</strong> after Stage 4 where a supply chain planner reviews flagged high-WMAPE SKUs before the LLM generates recommendations.</li>
+    <li>Integrate <strong>LangSmith</strong> or similar tracing platform for production-grade observability beyond JSON logs.</li>
+    <li>Add <strong>backtesting framework</strong> that replays historical data to validate safety stock recommendations against actual stockout events.</li>
+</ul>
+
+<div class="footer">
+    Design Walkthrough — Inventory Optimization &amp; Demand Forecasting Skill &nbsp;|&nbsp;
+    AMPBA CT2 Group Assignment Group 2 &nbsp;|&nbsp; April 2026
+</div>
+
+</body>
+</html>

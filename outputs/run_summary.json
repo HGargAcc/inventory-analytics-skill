@@ -1,0 +1,23 @@
+[
+  {
+    "run_id": "run1_default_20sku",
+    "name": "Run 1: Original 20-SKU Dataset \u2014 Default Params (95% SL, 30-day holdout)",
+    "success": true,
+    "model": "llama-3.3-70b-versatile",
+    "output_dir": "/Users/himanshu.garg/Desktop/my-analytics-skill/outputs/run1_default_20sku"
+  },
+  {
+    "run_id": "run2_alt_15sku_99sl",
+    "name": "Run 2: Alternative 15-SKU Dataset \u2014 Aggressive Params (99% SL, 45-day holdout)",
+    "success": true,
+    "model": "llama-3.3-70b-versatile",
+    "output_dir": "/Users/himanshu.garg/Desktop/my-analytics-skill/outputs/run2_alt_15sku_99sl"
+  },
+  {
+    "run_id": "run3_bad_data_failure",
+    "name": "Run 3: Corrupted Dataset \u2014 Failure Scenario (Expected: Pipeline Halts)",
+    "success": false,
+    "model": "llama-3.3-70b-versatile",
+    "output_dir": "/Users/himanshu.garg/Desktop/my-analytics-skill/outputs/run3_bad_data_failure"
+  }
+]

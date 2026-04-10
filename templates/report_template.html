@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Optimization & Forecasting Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; margin-top: 30px; }
+        h3 { color: #34495e; }
+        .summary-box { background-color: #f8f9fa; border-left: 4px solid #3498db; padding: 15px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 30px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f2f2f2; font-weight: bold; color: #2c3e50; }
+        tr:hover { background-color: #f5f5f5; }
+        .visualisation { text-align: center; margin: 30px 0; }
+        img { max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; padding: 5px; }
+        .footer { margin-top: 50px; font-size: 0.8em; color: #7f8c8d; text-align: center; border-top: 1px solid #ddd; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Inventory Optimization & Forecasting Report</h1>
+    <p><strong>Generated:</strong> {run_date}</p>
+
+    <div class="summary-box">
+        <h2>1. Executive Summary</h2>
+        <p>This automated analysis optimized inventory policies for <strong>{total_skus} SKUs</strong> across the enterprise supply chain. The pipeline dynamically selected the best performing predictive model per SKU, achieving an average Weighted Mean Absolute Percentage Error (WMAPE) of <strong>{avg_wmape}</strong>.</p>
+        <ul>
+            <li><strong>Model Selection:</strong> XGBoost outperformed on {xgb_wins} SKUs, while Prophet was optimal for {prophet_wins} SKUs.</li>
+            <li><strong>Service Level Target:</strong> Policies are calibrated to a 95% service level threshold.</li>
+        </ul>
+    </div>
+
+    <h2>2. Methodology</h2>
+    <p>The analytics pipeline executed a multi-algorithm champion/challenger methodology. For each SKU, both XGBoost and Prophet were evaluated on a validation holdout. The model exhibiting the lowest WMAPE was selected to generate the forward-looking demand mean and variance. Safety stock was subsequently calculated using the standard statistical formulation accounting for both demand volatility and historical lead time variability.</p>
+
+    <h2>3. Data Quality Summary</h2>
+    <p>Prior to modeling, the raw data underwent strict validation. The dataset contained <strong>{row_count} records</strong>.</p>
+    <p><strong>Status:</strong> {quality_status}</p>
+    <p><em>Note: Data imputation logic successfully addressed {warning_count} flagged warnings prior to feature engineering.</em></p>
+
+    <h2>4. Results & Visualisations</h2>
+    <div class="visualisation">
+        <img src="data:image/png;base64,{image_base64}" alt="Demand vs Safety Stock Scatter Plot">
+        <p><em>Figure 1: Distribution of Recommended Safety Stock relative to forecasted daily demand velocity.</em></p>
+    </div>
+
+    <h2>5. Validation Metrics & Inventory Policy Data</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>SKU ID</th>
+                <th>Category</th>
+                <th>Winning Model (WMAPE)</th>
+                <th>Forecasted Daily Demand</th>
+                <th>Recommended Safety Stock</th>
+                <th>Reorder Point (ROP)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {sku_rows}
+        </tbody>
+    </table>
+
+    <h2>6. Business Interpretation & Recommendations</h2>
+    <div id="llm_insights">
+        {llm_business_insights}
+    </div>
+
+    <h2>7. Assumptions & Limitations</h2>
+    <ul>
+        <li><strong>Constraint:</strong> The model assumes lead times are normally distributed and historical supplier performance is indicative of future performance.</li>
+        <li><strong>Constraint:</strong> The 95% service level target assumes an equal penalty for stockouts across all SKU categories, which may not reflect actual margin profiles.</li>
+    </ul>
+
+    <div class="footer">
+        Automated LLM-Powered Data Analytics Skill | System-Generated Report
+    </div>
+
+</body>
+</html>

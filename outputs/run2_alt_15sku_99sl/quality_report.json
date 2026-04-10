@@ -1,0 +1,53 @@
+{
+    "status": "PASS",
+    "row_count": 15525,
+    "column_count": 6,
+    "warnings": [],
+    "errors": [],
+    "column_profiles": {
+        "date": {
+            "dtype": "object",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "unique_values": 1035,
+            "min_date": "2023-06-01",
+            "max_date": "2026-03-31"
+        },
+        "sku_id": {
+            "dtype": "object",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "unique_values": 15
+        },
+        "category": {
+            "dtype": "object",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "unique_values": 10
+        },
+        "sales_volume": {
+            "dtype": "float64",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "min": 0.0,
+            "max": 4893.9,
+            "mean": 580.8465120772947
+        },
+        "unit_cost": {
+            "dtype": "float64",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "min": 0.9,
+            "max": 12.0,
+            "mean": 4.446666666666666
+        },
+        "lead_time_days": {
+            "dtype": "int64",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "min": 2.0,
+            "max": 30.0,
+            "mean": 10.699452495974235
+        }
+    }
+}

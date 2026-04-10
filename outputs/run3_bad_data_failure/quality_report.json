@@ -1,0 +1,57 @@
+{
+    "status": "FAIL",
+    "row_count": 3655,
+    "column_count": 6,
+    "warnings": [],
+    "errors": [
+        "Column 'sales_volume' exceeds 30% null threshold (40.3%).",
+        "Column 'unit_cost' contains negative values.",
+        "Column 'lead_time_days' contains lead times < 1 day."
+    ],
+    "column_profiles": {
+        "date": {
+            "dtype": "object",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "unique_values": 731,
+            "min_date": "2024-01-01",
+            "max_date": "2025-12-31"
+        },
+        "sku_id": {
+            "dtype": "object",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "unique_values": 5
+        },
+        "category": {
+            "dtype": "object",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "unique_values": 2
+        },
+        "sales_volume": {
+            "dtype": "float64",
+            "null_count": 1473,
+            "null_percentage": 40.3,
+            "min": 316.2,
+            "max": 1931.6,
+            "mean": 925.2134280476628
+        },
+        "unit_cost": {
+            "dtype": "float64",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "min": -5.5,
+            "max": 5.5,
+            "mean": 2.5127770177838578
+        },
+        "lead_time_days": {
+            "dtype": "int64",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "min": 0.0,
+            "max": 25.0,
+            "mean": 12.422435020519837
+        }
+    }
+}
