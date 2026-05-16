@@ -149,5 +149,3 @@ See [REFERENCE.md](REFERENCE.md) for:
 - Business recommendation templates per archetype
 
 ---
-
-**AMPBA CT2 Group Assignment Group 2 | April 2026**
